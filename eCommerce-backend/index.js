@@ -122,6 +122,11 @@ app.post('/removeProduct', async (req, res) => {
 })
 
 // creating API for getting all products
+app.get('/allProducts', async (req, res) => {
+    let products = await Product.find({});
+    console.log("All Products fetched");
+    res.send(products);
+})
 
 app.listen(portNo, (error) => {
     if(!error){
