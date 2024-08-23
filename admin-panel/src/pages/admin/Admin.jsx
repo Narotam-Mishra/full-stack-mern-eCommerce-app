@@ -2,7 +2,9 @@ import './Admin.css'
 
 const Admin = () => {
   return (
-    <div className='admin'>Admin</div>
+    <div className='admin'>
+      
+    </div>
   )
 }
 
