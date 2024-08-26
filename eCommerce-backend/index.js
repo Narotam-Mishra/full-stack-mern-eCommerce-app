@@ -150,7 +150,7 @@ const Users = mongoose.model('Users', {
 })
 
 // creating endpoint for registering the user
-app.post('/signup', async() => {
+app.post('/signup', async(req, res) => {
     
     let check = await Users.findOne({ email: req.body.email });
     if(check){
@@ -158,6 +158,53 @@ app.post('/signup', async() => {
             success: false,
             errors: "existing user found with same email id"
         })
+    }
+
+    let cart = {};
+    for(let i=0; i<300; i++){
+        cart[i] = 0;
+    }
+
+    const user = new Users({
+        name: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        cartData: cart,
+    })
+
+    // save signup data to DB
+    await user.save();
+
+    // this data will be used for JWT authentication
+    const data = {
+        user: {
+            id: user.id
+        }
+    }
+
+    const token = jwt.sign(data, process.env.JWT_SECRET);
+    res.json({ success: true, token});
+})
+
+// creating endpoint for user login
+app.post('/login', async (req, res) => {
+    let user = await Users.findOne({ email: req.body.email });
+    if(user){
+        const passCompare = req.body.password === user.password;
+        if(passCompare){
+            const data = {
+                user: {
+                    id: user.id
+                }
+            }
+
+            const token = jwt.sign(data, process.env.JWT_SECRET);
+            res.json({ success: true, token});
+        }else{
+            res.json({ success: false, error: "Wrong Password"});
+        }
+    }else{
+        res.json({ success: false, error: "Wrong Email Id"});
     }
 })
 
