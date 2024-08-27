@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-import { createContext, useState } from "react";
-import all_product from '../components/Assets/all_product'
+import { createContext, useEffect, useState } from "react";
+// import all_product from '../components/Assets/all_product'
 
 export const ShopContext = createContext(null);
 
 //get default cart items
 const getDefaultCart = () => {
     let cart = {};
-    for(let i=0; i<all_product.length+1; i++){
+    for(let i=0; i<300+1; i++){
         cart[i] = 0;
     }
     return cart;
@@ -15,6 +15,13 @@ const getDefaultCart = () => {
 
 const ShopContextProvider = (props) => {
 
+    const [all_product, setAllProducts] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:8421/allProducts')
+        .then((resp) => resp.json())
+        .then((data) => setAllProducts(data))
+    },[])
     const[cartItems, setCartItems] = useState(getDefaultCart());
     
     // console.log(cartItems);

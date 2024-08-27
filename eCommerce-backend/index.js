@@ -201,7 +201,7 @@ app.post('/login', async (req, res) => {
             const token = jwt.sign(data, process.env.JWT_SECRET);
             res.json({ success: true, token});
         }else{
-            res.json({ success: false, error: "Wrong Password"});
+            res.json({ success: false, error: "Invalid credentials"});
         }
     }else{
         res.json({ success: false, error: "Wrong Email Id"});
