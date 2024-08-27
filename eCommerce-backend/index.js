@@ -208,6 +208,24 @@ app.post('/login', async (req, res) => {
     }
 })
 
+// creating endpoint for new-collection data
+app.get('/newCollection', async (req, res) => {
+    let products = await Product.find({});
+    let newCollection = products.slice(1).slice(-8);
+    console.log("New Collection products fetched");
+    res.send(newCollection);
+})
+
+// creating endpoint for popular in women section
+app.get('/popularInWomen', async (req, res) => {
+    let products = await Product.find({ category:"women" });
+    let popular_in_women = products.slice(0, 4);
+    console.log("Poular in women products fetched");
+    res.send(popular_in_women);
+})
+
+// creating endpoint for adding products in cart data
+
 app.listen(portNo, (error) => {
     if(!error){
         console.log(`Server running on PORT: ${portNo}`);
