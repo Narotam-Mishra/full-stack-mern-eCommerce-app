@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
-const { type } = require('os');
 
 const app = express();
 
@@ -250,7 +249,6 @@ app.post('/addToCart', fetchUser, async (req, res) => {
     let userData = await Users.findOne({ _id: req.user.id });
     userData.cartData[req.body.itemId] += 1;
     await Users.findOneAndUpdate({_id: req.user.id}, {cartData: userData.cartData});
-    // console.log("Add to Cart successfull");
     res.send("Add to Cart successfull");
 })
 
@@ -262,6 +260,13 @@ app.post('/removeFromCart', fetchUser, async (req, res) => {
     userData.cartData[req.body.itemId] -= 1;
     await Users.findOneAndUpdate({_id: req.user.id}, {cartData: userData.cartData});
     res.send("Product removed from cart successfully");
+})
+
+// creating endpoint to get cart data
+app.post('/getCart', fetchUser, async (req, res) => {
+    console.log("Get cart");
+    let userData = await Users.findOne({ _id: req.user.id });
+    res.json(userData.cartData);
 })
 
 app.listen(portNo, (error) => {
