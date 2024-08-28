@@ -29,12 +29,39 @@ const ShopContextProvider = (props) => {
     // add to cart function
     const addToCart = (itemId) => {
         setCartItems((prev) => ({...prev, [itemId]:prev[itemId]+1}));
-        console.log(cartItems);
+        // console.log(cartItems);
+
+        if(localStorage.getItem('auth-token')){
+            fetch('http://localhost:8421/addToCart', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/form-data',
+                    'auth-token': `${localStorage.getItem('auth-token')}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"itemId":itemId})
+            })
+            .then((resp) => resp.json())
+            .then((data) => console.log(data))
+        }
     }
 
     // function to remove items from cart
     const removeFromCart = (itemId) => {
-        setCartItems((prev) => ({...prev, [itemId]:prev[itemId]-1}))
+        setCartItems((prev) => ({...prev, [itemId]:prev[itemId]-1}));
+        if(localStorage.getItem('auth-token')){
+            fetch('http://localhost:8421/removeFromCart', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/form-data',
+                    'auth-token': `${localStorage.getItem('auth-token')}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"itemId":itemId})
+            })
+            .then((resp) => resp.json())
+            .then((data) => console.log(data))
+        }
     }
 
     const getTotalCartAmount = () => {
